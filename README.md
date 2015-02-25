@@ -1,6 +1,6 @@
 # Autologger: Pain Free Logging 
 
-This package provides the `autolog` function, which instruments all functions in a session or package to let you follow along with the execution.
+This package provides the `autolog` function, which decorates all functions in a session or package to let you follow along with the execution.
 
 Here is an example:
 
@@ -13,12 +13,12 @@ Here is an example:
     wrapping	zzz
     
     autolg> zzz(2,1)
-    2015-02-24 18:55:10	zzz(2, 1) enter
-    2015-02-24 18:55:10		f(x, y) enter
-    2015-02-24 18:55:10		f(x, y) exit
-    2015-02-24 18:55:10		f(y, x) enter
-    2015-02-24 18:55:10		f(y, x) exit
-    2015-02-24 18:55:10	zzz(2, 1) exit
+    2015-02-24 18:55:10	zzz(2, 1) begin
+    2015-02-24 18:55:10		f(x, y) begin
+    2015-02-24 18:55:10		f(x, y) end
+    2015-02-24 18:55:10		f(y, x) begin
+    2015-02-24 18:55:10		f(y, x) end
+    2015-02-24 18:55:10	zzz(2, 1) end
     
 ## Logging a package
 
