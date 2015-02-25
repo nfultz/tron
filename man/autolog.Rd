@@ -4,18 +4,41 @@
 \alias{autolog}
 \title{Automatic Logging}
 \usage{
-autolog(e = .GlobalEnv, logger = "message",
+autolog(e = .GlobalEnv, logger = getOption("autolog.logger", "message"),
   verbose = getOption("autolog.verbose", FALSE))
 }
 \arguments{
-\item{e}{an environment to process; default to Global}
+\item{e}{an environment to process; defaults to the \code{\link{.GlobalEnv}}}
 
-\item{logger}{a logging function accepting \code{...}}
+\item{logger}{a logging function or name of function which accepts \code{...}}
 
-\item{verbose}{verbose output of what functions are being instrumented}
+\item{verbose}{logical, log which functions are detected and modified}
 }
 \description{
-Automatic Logging
+Call \code{\link{wrap}} on each function in an environment and assign the result back.
+}
+\section{Options}{
+
+You can set the following default parameters using \code{\link{option}}:
+\describe{
+\item{autolog.logger}{ name of a logging function}
+\item{autolog.verbose}{ logical }
+}
+}
+
+\section{Logging a package}{
+
+
+If you would like to add logging to an entire package, add the following to \code{R/zzz.R} in your package:
+\preformatted{
+  if(getOption("autologging", FALSE) && require(autolog)) autolog(environment())
+}
+This will be run on package load and add logging to every function in the package, including
+non-exported functions. To activate it,
+\preformatted{
+  options(autologging=TRUE) # Set *before* you load the pkg
+  library(mypkg)
+}
 }
 \examples{
 f <- function(a,b) a / b

@@ -1,10 +1,14 @@
 #' Automatic Logging
 #'
+#' This package provides a one-liner way to add logging to an entire package or R session.
+#'
+#' @author Neal Fultz \email{njf@@zestfinance.com}
 #' @name autolog-package
 #' @docType package
+#' @seealso \code{\link{autolog}}, \code{\link{wrap}}
 NULL
 
-# Class name for wrapped fns
+# Attribute name for wrapped fns
 .C = "autologger";
 
 # Package variable, used for tabbing function calls over
@@ -13,18 +17,38 @@ NULL
 
 #' Automatic Logging
 #' 
-#' @param e an environment to process; default to Global
-#' @param logger a logging function accepting \code{...}
-#' @param verbose verbose output of what functions are being instrumented
+#' Call \code{\link{wrap}} on each function in an environment and assign the result back.
 #' 
+#' @param e an environment to process; defaults to the \code{\link{.GlobalEnv}}
+#' @param logger a logging function or name of function which accepts \code{...}
+#' @param verbose logical, log which functions are detected and modified
+#' 
+#' @section Options:
+#' You can set the following default parameters using \code{\link{option}}:
+#' \describe{
+#' \item{autolog.logger}{ name of a logging function}
+#' \item{autolog.verbose}{ logical }
+#' }
+#' 
+#' @section Logging a package:
+#' 
+#' If you would like to add logging to an entire package, add the following to \code{R/zzz.R} in your package:
+#' \preformatted{   
+#'   if(getOption("autologging", FALSE) && require(autolog)) autolog(environment())
+#' }
+#' This will be run on package load and add logging to every function in the package, including 
+#' non-exported functions. To activate it, 
+#' \preformatted{
+#'   options(autologging=TRUE) # Set *before* you load the pkg
+#'   library(mypkg)
+#' }
 #' @export
 #' @examples
 #' f <- function(a,b) a / b
 #' zzz <- function(x,y) f(x,y) / f(y,x)
 #' autolog(environment(), verbose=TRUE)
 #' zzz(2,1)
-
-autolog <- function(e = .GlobalEnv, logger="message", verbose=getOption("autolog.verbose", FALSE)) {
+autolog <- function(e = .GlobalEnv, logger=getOption("autolog.logger", "message"), verbose=getOption("autolog.verbose", FALSE)){
   
   logger <- match.fun(logger);
   
@@ -33,45 +57,78 @@ autolog <- function(e = .GlobalEnv, logger="message", verbose=getOption("autolog
   for(i in objNames) {
     x <- get(i, e);
     if(!is.function(x)) next;
-    if(class(x) == .C) {
+    if(is.autologged(x)) {
       if(verbose) logger("skipping\t", i);
       next
     }
     if(verbose)
       logger("wrapping\t", i);
-    assign(i, wrap(x, logger), e);
+    assign(i, wrap(x, logger), envir=e);
   }
   
-  e$.AUTOLOG <- TRUE;
 }
 
 
+#' Wrap a function in logging code
+#'
+#' Create a logged copy of a function. Every time the new function is called, all three functions are called in order:
+#' \enumerate{ 
+#' \item \code{pre}
+#' \item \code{f}
+#' \item \code{post}
+#' }
+#'
+#' @param f a function to decorate
+#' @param pre a function, to be called before \code{f}
+#' @param post a function, to be called after \code{f}
+#'
+#' @details
+#' 
+#' Wrapped functions carry an \dQuote{autologged} attribute, which can be tested for using \code{is.autologged}. The original function \code{f} can be extracted
+#' using \code{unwrap}.
+#' 
+#' 
+#'
+#' @seealso \url{http://en.wikipedia.org/wiki/Decorator_pattern} and  \code{\link[memoise]{memoise}} for another example of \dQuote{decorator} functions.
+#' @export
+#' @examples
+#' f <- wrap(sum, message)
+#' f(1:10)
+#' is.autologged(f)
+#' f <- unwrap(f)
+#' f(1:10)
+wrap <- function(f, pre, post=pre) {
 
-wrap <- function(x, logger) {
-
-  # Bug 1: make sure x is forced, R is too lazy, it will infinitely recur on the final function in the loop above if one function calls another.
-  force(x);
-  force(logger);
+  # Bug 1: make sure f is forced, R is too lazy, it will infinitely recur on the final function in the loop above if one function calls another.
+  force(f);
+  force(pre);
+  force(post);
   
   #using `class<-` to keep local environment clean
-  `class<-`( 
+  `attr<-`( 
     function(...) {
       txt <- deparse(sys.call());
       
       .a$depth <- .a$depth + 1;
-      logger(Sys.time(), rep("\t", .a$depth), txt, " enter" );
+      pre(Sys.time(), rep("\t", .a$depth), txt, " begin" );
       
       on.exit( {   
-        logger(Sys.time(), rep("\t", .a$depth), txt, " exit");  
+        post(Sys.time(), rep("\t", .a$depth), txt, " end");  
         .a$depth <- .a$depth - 1;
       })
       
-      x(...);
+      f(...);
     },
-    .C
+    .C, TRUE
   )
 }
 
-unwrap <- function(x) {
-  if(class(x) == .C) environment(x)$x else x
+#' @rdname wrap
+#' @export
+is.autologged <- function(f)  identical(attr(f, .C), TRUE)
+
+#' @rdname wrap
+#' @export
+unwrap <- function(f) {
+  if(is.autologged(f)) environment(f)$f else f
 }

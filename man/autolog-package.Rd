@@ -5,6 +5,12 @@
 \alias{autolog-package}
 \title{Automatic Logging}
 \description{
-Automatic Logging
+This package provides a one-liner way to add logging to an entire package or R session.
+}
+\author{
+Neal Fultz \email{njf@zestfinance.com}
+}
+\seealso{
+\code{\link{autolog}}, \code{\link{wrap}}
 }
 
