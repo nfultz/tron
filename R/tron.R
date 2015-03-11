@@ -1,15 +1,15 @@
-#' Automatic Logging
+#' tron - Automatic Logging
 #'
 #' This package provides a one-liner way to add logging to an entire package or R session.
 #'
 #' @author Neal Fultz \email{njf@@zestfinance.com}
-#' @name autolog-package
+#' @name tron-package
 #' @docType package
-#' @seealso \code{\link{autolog}}, \code{\link{wrap}}
+#' @seealso \code{\link{tron}}, \code{\link{wrap}}
 NULL
 
 # Attribute name for wrapped fns
-.C = "autologger";
+.C = "tron";
 
 # Package variable, used for tabbing function calls over
 .a <- new.env(parent = emptyenv());
@@ -26,29 +26,29 @@ NULL
 #' @section Options:
 #' You can set the following default parameters using \code{\link{option}}:
 #' \describe{
-#' \item{autolog.logger}{ name of a logging function}
-#' \item{autolog.verbose}{ logical }
+#' \item{tron.logger}{ name of a logging function}
+#' \item{tron.verbose}{ logical }
 #' }
 #' 
 #' @section Logging a package:
 #' 
 #' If you would like to add logging to an entire package, add the following to \code{R/zzz.R} in your package:
 #' \preformatted{   
-#'   if(getOption("autologging", FALSE) && require(autolog)) autolog(environment())
+#'   if(getOption("tron", FALSE) && require(tron)) tron(environment())
 #' }
 #' This will be run on package load and add logging to every function in the package, including 
 #' non-exported functions. To activate it, 
 #' \preformatted{
-#'   options(autologging=TRUE) # Set *before* you load the pkg
+#'   options(tron=TRUE) # Set *before* you load the pkg
 #'   library(mypkg)
 #' }
 #' @export
 #' @examples
 #' f <- function(a,b) a / b
 #' zzz <- function(x,y) f(x,y) / f(y,x)
-#' autolog(environment(), verbose=TRUE)
+#' tron(environment(), verbose=TRUE)
 #' zzz(2,1)
-autolog <- function(e = .GlobalEnv, logger=getOption("autolog.logger", "message"), verbose=getOption("autolog.verbose", FALSE)){
+tron <- function(e = .GlobalEnv, logger=getOption("tron.logger", "message"), verbose=getOption("tron.verbose", FALSE)){
   
   logger <- match.fun(logger);
   
@@ -57,7 +57,7 @@ autolog <- function(e = .GlobalEnv, logger=getOption("autolog.logger", "message"
   for(i in objNames) {
     x <- get(i, e);
     if(!is.function(x)) next;
-    if(is.autologged(x)) {
+    if(is.tron(x)) {
       if(verbose) logger("skipping\t", i);
       next
     }
@@ -84,7 +84,7 @@ autolog <- function(e = .GlobalEnv, logger=getOption("autolog.logger", "message"
 #'
 #' @details
 #' 
-#' Wrapped functions carry an \dQuote{autologged} attribute, which can be tested for using \code{is.autologged}. The original function \code{f} can be extracted
+#' Wrapped functions carry an \dQuote{tron} class, which can be tested for using \code{is.tron}. The original function \code{f} can be extracted
 #' using \code{unwrap}.
 #' 
 #' 
@@ -94,7 +94,7 @@ autolog <- function(e = .GlobalEnv, logger=getOption("autolog.logger", "message"
 #' @examples
 #' f <- wrap(sum, message)
 #' f(1:10)
-#' is.autologged(f)
+#' is.tron(f)
 #' f <- unwrap(f)
 #' f(1:10)
 wrap <- function(f, pre, post=pre) {
@@ -125,10 +125,10 @@ wrap <- function(f, pre, post=pre) {
 
 #' @rdname wrap
 #' @export
-is.autologged <- function(f)  identical(attr(f, .C), TRUE)
+is.tron <- function(f)  identical(attr(f, .C), TRUE)
 
 #' @rdname wrap
 #' @export
 unwrap <- function(f) {
-  if(is.autologged(f)) environment(f)$f else f
+  if(is.tron(f)) environment(f)$f else f
 }
