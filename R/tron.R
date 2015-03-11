@@ -5,7 +5,7 @@
 #' @author Neal Fultz \email{njf@@zestfinance.com}
 #' @name tron-package
 #' @docType package
-#' @seealso \code{\link{tron}}, \code{\link{wrap}}
+#' @seealso \code{\link{tron}}, \code{\link{untron}}
 NULL
 
 # Attribute name for wrapped fns
@@ -15,7 +15,7 @@ NULL
 .a <- new.env(parent = emptyenv());
 .a$depth = 0;
 
-#' Automatic Logging
+#' tron - Automatic Logging
 #' 
 #' Call \code{\link{wrap}} on each function in an environment and assign the result back.
 #' 
@@ -48,7 +48,7 @@ NULL
 #' zzz <- function(x,y) f(x,y) / f(y,x)
 #' tron(environment(), verbose=TRUE)
 #' zzz(2,1)
-tron <- function(e = .GlobalEnv, logger=getOption("tron.logger", "message"), verbose=getOption("tron.verbose", FALSE)){
+tron.environment <- function(e = .GlobalEnv, logger=getOption("tron.logger", "message"), verbose=getOption("tron.verbose", FALSE)){
   
   logger <- match.fun(logger);
   
@@ -63,13 +63,15 @@ tron <- function(e = .GlobalEnv, logger=getOption("tron.logger", "message"), ver
     }
     if(verbose)
       logger("wrapping\t", i);
-    assign(i, wrap(x, logger), envir=e);
+    assign(i, tron(x, logger), envir=e);
   }
+
+  attr(e, .C) <- TRUE
   
 }
 
 
-#' Wrap a function in logging code
+#' tron - Wrap a function in logging code
 #'
 #' Create a logged copy of a function. Every time the new function is called, all three functions are called in order:
 #' \enumerate{ 
@@ -85,50 +87,68 @@ tron <- function(e = .GlobalEnv, logger=getOption("tron.logger", "message"), ver
 #' @details
 #' 
 #' Wrapped functions carry an \dQuote{tron} class, which can be tested for using \code{is.tron}. The original function \code{f} can be extracted
-#' using \code{unwrap}.
+#' using \code{untron}.
 #' 
 #' 
 #'
 #' @seealso \url{http://en.wikipedia.org/wiki/Decorator_pattern} and  \code{\link[memoise]{memoise}} for another example of \dQuote{decorator} functions.
 #' @export
 #' @examples
-#' f <- wrap(sum, message)
+#' f <- tron(sum, message)
 #' f(1:10)
 #' is.tron(f)
-#' f <- unwrap(f)
+#' f <- untron(f)
 #' f(1:10)
-wrap <- function(f, pre, post=pre) {
+tron.function <- function(f, pre, post=pre) {
 
   # Bug 1: make sure f is forced, R is too lazy, it will infinitely recur on the final function in the loop above if one function calls another.
   force(f);
   force(pre);
   force(post);
   
-  #using `class<-` to keep local environment clean
-  `attr<-`( 
+  structure( 
     function(...) {
       txt <- deparse(sys.call());
       
       .a$depth <- .a$depth + 1;
+      
+      on.exit({ .a$depth <- .a$depth - 1 })
+      
       pre(Sys.time(), rep("\t", .a$depth), txt, " begin" );
-      
-      on.exit( {   
-        post(Sys.time(), rep("\t", .a$depth), txt, " end");  
-        .a$depth <- .a$depth - 1;
-      })
-      
-      f(...);
+      tmp <- f(...);
+      post(Sys.time(), rep("\t", .a$depth), txt, " end");  
+      tmp
     },
-    .C, TRUE
+    tron=TRUE
   )
 }
 
-#' @rdname wrap
+#' @rdname tron
 #' @export
 is.tron <- function(f)  identical(attr(f, .C), TRUE)
 
-#' @rdname wrap
+#' @rdname tron.function
 #' @export
-unwrap <- function(f) {
+untron.function <- function(f) {
   if(is.tron(f)) environment(f)$f else f
+}
+
+untron.environment <- function(e) {
+
+  objNames <- ls(e);
+  
+  for(i in objNames) {
+    x <- get(i, e);
+    if(!is.function(x)) next;
+    if(!is.tron(x)) {
+      if(verbose) logger("skipping\t", i);
+      next
+    }
+    if(verbose)
+      logger("unwrapping\t", i);
+    assign(i, untron(x), envir=e);
+  }
+
+  attr(e, .C) <- NULL
+
 }
