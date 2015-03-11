@@ -1,4 +1,4 @@
-Package: autolog
+Package: tron
 Type: Package
 Title: Automatically add logging to functions
 Version: 1.0
