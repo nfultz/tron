@@ -1,6 +1,6 @@
 #' tron - Automatic Logging
 #' 
-#' Call \code{\link{tron}} on each function in an environment and assign the result back.
+#' Call \code{\link{tron.function}} on each function in an environment and assign the result back.
 #' 
 #' @param e an environment to process; defaults to the \code{\link{.GlobalEnv}}
 #' @param logger a logging function or name of function which accepts \code{...}
@@ -57,8 +57,9 @@ tron.environment <- function(e = .GlobalEnv, logger=getOption("tron.logger", "me
 #' @rdname tron.environment
 untron.environment <- function(e) {
 
+  verbose <- getOption("tron.verbose", FALSE);
   objNames <- ls(e);
-  
+
   for(i in objNames) {
     x <- get(i, e);
     if(!is.function(x)) next;
