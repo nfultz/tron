@@ -36,20 +36,12 @@ tron.environment <- function(e = .GlobalEnv,
                              verbose=getOption("tron.verbose", FALSE)){
   
   logger <- match.fun(logger);
-  
-  objNames <- ls(e);
-  
-  for(i in objNames) {
-    x <- get(i, e);
-    if(!is.function(x)) next;
-    if(is.tron(x)) {
-      if(verbose) logger("skipping\t", i);
-      next
-    }
-    if(verbose)
-      logger("wrapping\t", i);
-    assign(i, tron(x, logger), envir=e);
-  }
+
+  R <- eapply(e, function(x) if(is.function(x) && !is.tron(x)) x)
+  R <- Filter(Negate(is.null), R)
+  if(verbose) logger(paste('wrapping', names(R), '\n'))
+  list2env(lapply(R, tron, logger), e)
+
 
   attr(e, "tron") <- TRUE
   
@@ -78,3 +70,5 @@ troff.environment <- function(e) {
   attr(e, "tron") <- NULL
 
 }
+
+
