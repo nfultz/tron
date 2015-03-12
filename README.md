@@ -4,15 +4,15 @@ This package provides the `tron` function, which decorates all functions in a se
 
 Here is an example:
 
-    autolg> f <- function(a,b) a / b
+    tron> f <- function(a,b) a / b
     
-    autolg> zzz <- function(x,y) f(x,y) / f(y,x)
+    tron> zzz <- function(x,y) f(x,y) / f(y,x)
     
-    autolg> tron(environment(), verbose=TRUE)
+    tron> tron(environment(), verbose=TRUE)
     wrapping  f
     wrapping	zzz
     
-    autolg> zzz(2,1)
+    tron> zzz(2,1)
     2015-02-24 18:55:10	zzz(2, 1) begin
     2015-02-24 18:55:10		f(x, y) begin
     2015-02-24 18:55:10		f(x, y) end

@@ -1,4 +1,4 @@
-#' tron - Automatic Logging
+#' tron - x Log a session or package
 #' 
 #' Call \code{\link{tron.function}} on each function in an environment and assign the result back.
 #' 
@@ -31,7 +31,9 @@
 #' zzz <- function(x,y) f(x,y) / f(y,x)
 #' tron(environment(), verbose=TRUE)
 #' zzz(2,1)
-tron.environment <- function(e = .GlobalEnv, logger=getOption("tron.logger", "message"), verbose=getOption("tron.verbose", FALSE)){
+tron.environment <- function(e = .GlobalEnv,
+                             logger=getOption("tron.logger", "message"),
+                             verbose=getOption("tron.verbose", FALSE)){
   
   logger <- match.fun(logger);
   
