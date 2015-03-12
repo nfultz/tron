@@ -25,7 +25,8 @@ Create a logged copy of a function. Every time the new function is called, all t
 }
 }
 \details{
-Wrapped functions carry an \dQuote{tron} class, which can be tested for using \code{is.tron}. The original function \code{f} can be extracted
+Wrapped functions carry a \dQuote{tron} attribute, which can be tested for
+using \code{is.tron}. The original function \code{f} can be extracted
 using \code{troff}.
 }
 \examples{

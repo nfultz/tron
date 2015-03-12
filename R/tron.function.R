@@ -13,7 +13,8 @@
 #'
 #' @details
 #' 
-#' Wrapped functions carry an \dQuote{tron} class, which can be tested for using \code{is.tron}. The original function \code{f} can be extracted
+#' Wrapped functions carry a \dQuote{tron} attribute, which can be tested for
+#' using \code{is.tron}. The original function \code{f} can be extracted
 #' using \code{troff}.
 #' 
 #' 
@@ -34,7 +35,8 @@ tron.function <- local({
 
     function(f, pre, post=pre) {
 
-      # Bug 1: make sure f is forced, R is too lazy, it will infinitely recur on the final function in the loop above if one function calls another.
+      # Bug 1: make sure f is forced, R is too lazy, it will infinitely recur
+      # on the final function in the loop above if one function calls another.
       force(f);
       force(pre);
       force(post);
