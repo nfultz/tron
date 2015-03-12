@@ -34,41 +34,23 @@
 tron.environment <- function(e = .GlobalEnv,
                              logger=getOption("tron.logger", "message"),
                              verbose=getOption("tron.verbose", FALSE)){
-  
   logger <- match.fun(logger);
-
-  R <- eapply(e, function(x) if(is.function(x) && !is.tron(x)) x)
-  R <- Filter(Negate(is.null), R)
-  if(verbose) logger(paste('wrapping', names(R), '\n'))
-  list2env(lapply(R, tron, logger), e)
-
-
-  attr(e, "tron") <- TRUE
-  
+  t.e.impl(e,TRUE,verbose,"wrapping",tron, logger)
 }
 
 #' @export
 #' @rdname tron.environment
 troff.environment <- function(e) {
-
   verbose <- getOption("tron.verbose", FALSE);
-  logger <- match.fun(getOption("tron.logger", "message"))
-  objNames <- ls(e);
-
-  for(i in objNames) {
-    x <- get(i, e);
-    if(!is.function(x)) next;
-    if(!is.tron(x)) {
-      if(verbose) logger("skipping\t", i);
-      next
-    }
-    if(verbose)
-      logger("unwrapping\t", i);
-    assign(i, troff(x), envir=e);
-  }
-
-  attr(e, "tron") <- NULL
-
+  t.e.impl(e,FALSE,verbose,"unwrapping",troff)
 }
 
-
+# e - the environment
+# M- a mask
+t.e.impl <- function(e, M, verbose, label, ...) {
+  R <- eapply(e, function(x) if(is.function(x) && xor(is.tron(x),M)) x)
+  R <- Filter(Negate(is.null), R)
+  if(isTRUE(verbose)) message(paste(label, names(R), '\n'))
+  list2env(lapply(R,...), e)
+  attr(e, "tron") <- M
+}
