@@ -14,7 +14,7 @@
 #' @details
 #' 
 #' Wrapped functions carry an \dQuote{tron} class, which can be tested for using \code{is.tron}. The original function \code{f} can be extracted
-#' using \code{untron}.
+#' using \code{troff}.
 #' 
 #' 
 #'
@@ -24,35 +24,42 @@
 #' f <- tron(sum, message)
 #' f(1:10)
 #' is.tron(f)
-#' f <- untron(f)
+#' f <- troff(f)
 #' f(1:10)
-tron.function <- function(f, pre, post=pre) {
+tron.function <- local({
 
-  # Bug 1: make sure f is forced, R is too lazy, it will infinitely recur on the final function in the loop above if one function calls another.
-  force(f);
-  force(pre);
-  force(post);
-  
-  structure( 
-    function(...) {
-      txt <- deparse(sys.call());
+    # static var for tabbing over.
+    .a <- new.env(parent=emptyenv())
+    .a$depth <- 0
+
+    function(f, pre, post=pre) {
+
+      # Bug 1: make sure f is forced, R is too lazy, it will infinitely recur on the final function in the loop above if one function calls another.
+      force(f);
+      force(pre);
+      force(post);
       
-      .a$depth <- .a$depth + 1;
-      
-      on.exit({ .a$depth <- .a$depth - 1 })
-      
-      pre(Sys.time(), rep("\t", .a$depth), txt, " begin" );
-      tmp <- f(...);
-      post(Sys.time(), rep("\t", .a$depth), txt, " end");  
-      tmp
-    },
-    tron=TRUE
-  )
-}
+      structure( 
+        function(...) {
+          txt <- deparse(sys.call());
+          
+          .a$depth <- .a$depth + 1;
+          
+          on.exit({ .a$depth <- .a$depth - 1 })
+          
+          pre(Sys.time(), rep("\t", .a$depth), txt, " begin" );
+          tmp <- f(...);
+          post(Sys.time(), rep("\t", .a$depth), txt, " end");  
+          tmp
+        },
+        tron=TRUE
+      )
+    }
+})
 
 #' @rdname tron.function
 #' @export
-untron.function <- function(f) {
+troff.function <- function(f) {
   if(is.tron(f)) environment(f)$f else f
 }
 

@@ -51,15 +51,16 @@ tron.environment <- function(e = .GlobalEnv,
     assign(i, tron(x, logger), envir=e);
   }
 
-  attr(e, .C) <- TRUE
+  attr(e, "tron") <- TRUE
   
 }
 
 #' @export
 #' @rdname tron.environment
-untron.environment <- function(e) {
+troff.environment <- function(e) {
 
   verbose <- getOption("tron.verbose", FALSE);
+  logger <- match.fun(getOption("tron.logger", "message"))
   objNames <- ls(e);
 
   for(i in objNames) {
@@ -71,9 +72,9 @@ untron.environment <- function(e) {
     }
     if(verbose)
       logger("unwrapping\t", i);
-    assign(i, untron(x), envir=e);
+    assign(i, troff(x), envir=e);
   }
 
-  attr(e, .C) <- NULL
+  attr(e, "tron") <- NULL
 
 }

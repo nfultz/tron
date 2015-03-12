@@ -3,20 +3,25 @@
 \docType{package}
 \name{tron}
 \alias{is.tron}
+\alias{troff}
 \alias{tron}
 \alias{tron-package}
-\alias{untron}
 \title{tron - Automatic Logging}
 \usage{
 tron(x, ...)
 
-untron(x, ...)
+troff(x, ...)
 
-is.tron(f)
+is.tron(x)
+}
+\arguments{
+\item{x}{an object}
+
+\item{...}{Arguments to be passed to methods.}
 }
 \description{
-This package provides a one-liner way to add logging to a function,
-session, or an entire package.
+This package provides a one-liner way to enable/disable logging
+to a function, session, or an entire package.
 }
 \author{
 Neal Fultz \email{njf@zestfinance.com}
