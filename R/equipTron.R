@@ -11,7 +11,7 @@ equipTron <- function() {
   cat(readLines(zzz), sep="\n", file=out, append=TRUE)
 
   message("Adding tron to DESCRIPTION")
-  cat("Suggests: tron", sep="\n", file="DESCRIPTION", append=TRUE)
+  cat("\nSuggests: tron", file="DESCRIPTION", append=TRUE)
 
   invisible(TRUE)
 }
