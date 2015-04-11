@@ -8,11 +8,11 @@
 \alias{tron-package}
 \title{tron - Automatic Logging}
 \usage{
-tron(x, ...)
+tron(x = .GlobalEnv, ...)
 
-troff(x, ...)
+troff(x = .GlobalEnv, ...)
 
-is.tron(x)
+is.tron(x = .GlobalEnv)
 }
 \arguments{
 \item{x}{an object}
@@ -27,6 +27,6 @@ to a function, session, or an entire package.
 Neal Fultz \email{njf@zestfinance.com}
 }
 \seealso{
-\code{\link{tron.function}}, \code{\link{tron.environment}}
+\code{\link{.tron.function}}, \code{\link{.tron.environment}}
 }
 

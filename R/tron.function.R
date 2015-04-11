@@ -7,7 +7,7 @@
 #' \item \code{post}
 #' }
 #'
-#' @param f a function to decorate
+#' @param x a function to decorate
 #' @param pre a function, to be called before \code{f}
 #' @param post a function, to be called after \code{f}
 #'
@@ -20,24 +20,24 @@
 #' 
 #'
 #' @seealso \url{http://en.wikipedia.org/wiki/Decorator_pattern} and  \code{\link[memoise]{memoise}} for another example of \dQuote{decorator} functions.
-#' @export
+#' @rdname tron.function
 #' @examples
 #' f <- tron(sum, message)
 #' f(1:10)
 #' is.tron(f)
 #' f <- troff(f)
 #' f(1:10)
-tron.function <- local({
+.tron.function <- local({
 
     # static var for tabbing over.
     .a <- new.env(parent=emptyenv())
     .a$depth <- 0
 
-    function(f, pre, post=pre) {
+    function(x, pre, post=pre) {
 
       # Bug 1: make sure f is forced, R is too lazy, it will infinitely recur
       # on the final function in the loop above if one function calls another.
-      force(f);
+      force(x);
       force(pre);
       force(post);
       
@@ -50,7 +50,7 @@ tron.function <- local({
           on.exit({ .a$depth <- .a$depth - 1 })
           
           pre(Sys.time(), rep("\t", .a$depth), txt, " begin" );
-          tmp <- f(...);
+          tmp <- x(...);
           post(Sys.time(), rep("\t", .a$depth), txt, " end");  
           tmp
         },
@@ -60,8 +60,7 @@ tron.function <- local({
 })
 
 #' @rdname tron.function
-#' @export
-troff.function <- function(f) {
-  if(is.tron(f)) environment(f)$f else f
+.troff.function <- function(x) {
+  if(is.tron(x)) environment(x)$x else x
 }
 

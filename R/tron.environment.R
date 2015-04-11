@@ -1,8 +1,8 @@
 #' tron - x Log a session or package
 #' 
-#' Call \code{\link{tron.function}} on each function in an environment and assign the result back.
+#' Call \code{\link{.tron.function}} on each function in an environment and assign the result back.
 #' 
-#' @param e an environment to process; defaults to the \code{\link{.GlobalEnv}}
+#' @param x an environment to process; defaults to the \code{\link{.GlobalEnv}}
 #' @param logger a logging function or name of function which accepts \code{...}
 #' @param verbose logical, log which functions are detected and modified
 #' 
@@ -25,24 +25,23 @@
 #'   options(tron=TRUE) # Set *before* you load the pkg
 #'   library(mypkg)
 #' }
-#' @export
+#' @rdname tron.environment
 #' @examples
 #' f <- function(a,b) a / b
 #' zzz <- function(x,y) f(x,y) / f(y,x)
 #' tron(environment(), verbose=TRUE)
 #' zzz(2,1)
-tron.environment <- function(e = .GlobalEnv,
+.tron.environment <- function(x,
                              logger=getOption("tron.logger", "message"),
                              verbose=getOption("tron.verbose", FALSE)){
   logger <- match.fun(logger);
-  t.e.impl(e,TRUE,verbose,"wrapping",tron, logger)
+  t.e.impl(x,TRUE,verbose,"wrapping",tron, logger)
 }
 
-#' @export
 #' @rdname tron.environment
-troff.environment <- function(e) {
+.troff.environment <- function(x) {
   verbose <- getOption("tron.verbose", FALSE);
-  t.e.impl(e,FALSE,verbose,"unwrapping",troff)
+  t.e.impl(x,FALSE,verbose,"unwrapping",troff)
 }
 
 # e - the environment

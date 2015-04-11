@@ -10,8 +10,10 @@ equipTron <- function() {
   out <- file.path(getwd(), "R", "zzz.R")
   cat(readLines(zzz), sep="\n", file=out, append=TRUE)
 
-  message("Adding tron to DESCRIPTION")
-  cat("\nSuggests: tron", file="DESCRIPTION", append=TRUE)
+  if (requireNamespace("devtools", quietly = TRUE)) {
+    message("Adding tron to DESCRIPTION")
+    devtools::use_package("tron", "Suggests")
+  }
 
   invisible(TRUE)
 }

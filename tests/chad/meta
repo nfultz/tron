@@ -2,5 +2,6 @@
 -- require(chad)
 -- tests <- chadRecur()
 -- print(transform(tests, time=time < .015))
-        file status time
-1 hello.chad      0 TRUE
+        file status  time
+1 hello.chad      0  TRUE
+2 tron1.chad      0 FALSE

@@ -3,6 +3,6 @@
 .onLoad <- function(libName,pkgName) {
    if(getOption("tron", FALSE) && requireNamespace("tron", quietly=TRUE)) {
      packageStartupMessage("Using tron on ", pkgName)
-     tron:::tron.environment(parent.env(environment()))
+     tron::tron(parent.env(environment()))
    }
 }
