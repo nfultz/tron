@@ -8,3 +8,4 @@ Maintainer: Neal Fultz <njf@zestfinance.com>
 Description: This package automatically adds logging code to other functions.
 License: GPL-3
 Copyright: ZestFinance 2015
+Suggests: chad

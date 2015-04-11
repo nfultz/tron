@@ -1,0 +1,6 @@
+-- # Meta-chad
+-- require(chad)
+-- tests <- chadRecur()
+-- print(transform(tests, time=time < .015))
+        file status time
+1 hello.chad      0 TRUE
