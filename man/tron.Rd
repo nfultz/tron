@@ -8,9 +8,9 @@
 \alias{tron-package}
 \title{tron - Automatic Logging}
 \usage{
-tron(x = .GlobalEnv, ...)
+tron(x = parent.frame(), ...)
 
-troff(x = .GlobalEnv, ...)
+troff(x = parent.frame(), ...)
 
 is.tron(x = .GlobalEnv)
 }
