@@ -1,6 +1,6 @@
--- require(tron)
--- f <- function(x) x
--- g <- function(x) f(x)
--- h <- function(x) g(x)
--- tron()
--- h(5)
+> require(tron)
+> f <- function(x) x
+> g <- function(x) f(x)
+> h <- function(x) g(x)
+> tron(verbose=TRUE)
+> is.tron(g)
