@@ -2,5 +2,18 @@
 > f <- function(x) x
 > g <- function(x) f(x)
 > h <- function(x) g(x)
-> tron(verbose=TRUE)
+> tron(verbose=TRUE, logger=function(x, y, z, w) message('YYYY-MM-DD HH:MM:SS.ss', y,z,w))
+wrapping f 
+wrapping g 
+wrapping h 
+
 > is.tron(g)
+[1] TRUE
+> h(2)
+YYYY-MM-DD HH:MM:SS.ss	h(2) begin
+YYYY-MM-DD HH:MM:SS.ss		g(x) begin
+YYYY-MM-DD HH:MM:SS.ss			f(x) begin
+YYYY-MM-DD HH:MM:SS.ss			f(x) end
+YYYY-MM-DD HH:MM:SS.ss		g(x) end
+YYYY-MM-DD HH:MM:SS.ss	h(2) end
+[1] 2
