@@ -7,3 +7,11 @@ wrapping f
 wrapping g 
 wrapping h 
 
+> h(2)
+YYYY-MM-DD HH:MM:SS.ss	h(2) begin
+YYYY-MM-DD HH:MM:SS.ss		g(x) begin
+YYYY-MM-DD HH:MM:SS.ss			f(x) begin
+YYYY-MM-DD HH:MM:SS.ss			f(x) end
+YYYY-MM-DD HH:MM:SS.ss		g(x) end
+YYYY-MM-DD HH:MM:SS.ss	h(2) end
+[1] 2
