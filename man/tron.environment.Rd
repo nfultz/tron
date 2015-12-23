@@ -3,7 +3,7 @@
 \name{.tron.environment}
 \alias{.troff.environment}
 \alias{.tron.environment}
-\title{tron - x Log a session or package}
+\title{tron - Log a session or package}
 \usage{
 \method{.tron}{environment}(x, logger = getOption("tron.logger", "message"),
   verbose = getOption("tron.verbose", FALSE))

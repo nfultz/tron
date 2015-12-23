@@ -1,4 +1,4 @@
-#' tron - x Log a session or package
+#' tron - Log a session or package
 #' 
 #' Call \code{\link{.tron.function}} on each function in an environment and assign the result back.
 #' 
@@ -41,3 +41,6 @@ t.e.impl <- function(e, M, verbose, label, ...) {
   list2env(lapply(R,...), e)
   attr(e, "tron") <- M
 }
+
+testingLogger <- function(x, y, z, w) message('YYYY-MM-DD HH:MM:SS.ss', y,z,w)
+
