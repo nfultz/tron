@@ -64,3 +64,5 @@
   if(is.tron(x)) environment(x)$x else x
 }
 
+#' @export
+testingLogger <- function(x, y, z, w) message('YYYY-MM-DD HH:MM:SS.ss', y,z,w)

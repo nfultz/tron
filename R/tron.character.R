@@ -1,4 +1,3 @@
-
 #' tron - Log an environment
 #' 
 #' Call \code{\link{.tron.environment}} on the package NAMESPACE

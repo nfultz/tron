@@ -1,12 +1,14 @@
 Package: tron
 Type: Package
 Title: Trace logging functions for R
-Version: 1.1
+Version: 2.0
 Date: 2015-04-11
 Author: Neal Fultz <njf@zestfinance.com>
 Maintainer: Neal Fultz <njf@zestfinance.com>
 Description: This package automatically adds logging code to other functions.
 License: GPL-3
 Copyright: ZestFinance 2015
-Suggests: chad, 
-          devtools
+Suggests:
+    chad,
+    devtools
+RoxygenNote: 5.0.1

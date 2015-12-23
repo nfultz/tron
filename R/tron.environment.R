@@ -13,18 +13,6 @@
 #' \item{tron.verbose}{ logical }
 #' }
 #' 
-#' @section Logging a package:
-#' 
-#' If you would like to add logging to an entire package, add the following to \code{R/zzz.R} in your package:
-#' \preformatted{   
-#'   if(getOption("tron", FALSE) && require(tron)) tron(environment())
-#' }
-#' This will be run on package load and add logging to every function in the package, including 
-#' non-exported functions. To activate it, 
-#' \preformatted{
-#'   options(tron=TRUE) # Set *before* you load the pkg
-#'   library(mypkg)
-#' }
 #' @rdname tron.environment
 #' @examples
 #' f <- function(a,b) a / b

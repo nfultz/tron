@@ -2,7 +2,7 @@
 > f <- function(x) x
 > g <- function(x) f(x)
 > h <- function(x) g(x)
-> tron(verbose=TRUE, logger=tron::testingLogger)
+> tron(verbose=TRUE, logger=testingLogger)
 wrapping f 
 wrapping g 
 wrapping h 

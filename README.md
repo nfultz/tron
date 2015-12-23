@@ -1,6 +1,7 @@
 # tron: Pain Free Logging 
 
-This package provides the `tron` function, which decorates all functions in a session or package to let you follow along with the execution.
+This package provides the `tron` function, which decorates all functions in a session
+or package to let you follow along with the execution.
 
 Here is an example:
 
@@ -22,12 +23,6 @@ Here is an example:
     
 ## Logging a package
 
-If you would like to add logging to an entire package, add the following to `R/zzz.R`:
+If you would like to add logging to an entire package, tron it before you load it:
 
-    if(getOption("tron", FALSE) && require(tron)) tron(environment())
-
-This will be run on package load and add logging to every function in the package, including 
-non-exported functions. To activate it, 
-
-    options(tron=TRUE) # Set *before* you load the pkg
-    library(mypkg)
+    tron("ht"); require(ht)
