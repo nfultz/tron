@@ -1,6 +1,0 @@
-> # Meta-chad
-> require(chad)
-> tests <- chadRecur()
-> transform(tests, time=time < .015)
-        file status  time
-1 tron1.chad      0 FALSE
