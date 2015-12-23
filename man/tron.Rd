@@ -12,7 +12,7 @@ tron(x = parent.frame(), ...)
 
 troff(x = parent.frame(), ...)
 
-is.tron(x = .GlobalEnv)
+is.tron(x = parent.frame())
 }
 \arguments{
 \item{x}{an object}
@@ -24,7 +24,7 @@ This package provides a one-liner way to enable/disable logging
 to a function, session, or an entire package.
 }
 \author{
-Neal Fultz \email{njf@zestfinance.com}
+Neal Fultz \email{nfultz@gmail.com}
 }
 \seealso{
 \code{\link{.tron.function}}, \code{\link{.tron.environment}}

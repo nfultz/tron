@@ -3,12 +3,13 @@ Type: Package
 Title: Trace logging functions for R
 Version: 2.0
 Date: 2015-04-11
-Author: Neal Fultz <njf@zestfinance.com>
-Maintainer: Neal Fultz <njf@zestfinance.com>
+Author: Neal Fultz <nfultz@gmail.com>
+Maintainer: Neal Fultz <nfultz@gmail.com>
 Description: This package automatically adds logging code to other functions.
 License: GPL-3
-Copyright: ZestFinance 2015
+Copyright: ZestFinance 2015, changes after July 2015 Copyright Neal Fultz
 Suggests:
     chad,
     devtools
+URL: https://www.github.com/nfultz/tron
 RoxygenNote: 5.0.1

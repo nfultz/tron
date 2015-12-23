@@ -2,7 +2,7 @@
 #' 
 #' Call \code{\link{.tron.function}} on each function in an environment and assign the result back.
 #' 
-#' @param x an environment to process; defaults to the \code{\link{.GlobalEnv}}
+#' @param x an environment or name of namespace; defaults to the \code{\link{parent.frame}}
 #' @param logger a logging function or name of function which accepts \code{...}
 #' @param verbose logical, log which functions are detected and modified
 #' 

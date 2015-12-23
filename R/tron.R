@@ -3,7 +3,7 @@
 #' This package provides a one-liner way to enable/disable logging 
 #' to a function, session, or an entire package.
 #'
-#' @author Neal Fultz \email{njf@@zestfinance.com}
+#' @author Neal Fultz \email{nfultz@@gmail.com}
 #' @name tron
 #' @aliases tron-package
 #' @docType package
@@ -24,5 +24,5 @@ troff <- function(x=parent.frame(), ...){ .troff(x, ...)}
 
 #' @rdname tron
 #' @export
-is.tron <- function(x=.GlobalEnv)  identical(attr(x, "tron"), TRUE)
+is.tron <- function(x=parent.frame())  identical(attr(x, "tron"), TRUE)
 
